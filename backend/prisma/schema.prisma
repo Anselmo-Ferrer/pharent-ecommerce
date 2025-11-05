@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ALERTA_ESTOQUE {
+  id_alerta   Int       @id @default(autoincrement())
+  data_alerta DateTime? @default(now()) @db.Timestamp(0)
+  mensagem    String    @db.Text
+  visualizado Boolean?  @default(false)
+  id_produto  Int
+  produto     PRODUTO   @relation(fields: [id_produto], references: [id_produto], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([id_produto], map: "fk_alerta_produto")
+}
+
+model CATEGORIA {
+  id_categoria Int       @id @default(autoincrement())
+  nome         String    @unique
+  slug         String    @unique
+  descricao    String?
+  imagem       String?
+  
+  produtos     PRODUTO[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model CLIENTE {
+  id_cliente Int      @id @default(autoincrement())
+  nome       String   @db.VarChar(100)
+  cpf        String   @unique @db.VarChar(11)
+  email      String   @unique @db.VarChar(100)
+  telefone   String?  @db.VarChar(15)
+  endereco   String?  @db.VarChar(255)
+  senha      String   @db.VarChar(100)
+  role       String   @db.VarChar(20)
+
+  pedidos    PEDIDO[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model FORNECEDOR {
+  id_fornecedor Int      @id @default(autoincrement())
+  nome          String
+  cnpj          String   @unique
+  telefone      String?
+  email         String?
+  
+  produtos      PRODUTO[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model ITEM_PEDIDO {
+  id_item        Int      @id @default(autoincrement())
+  quantidade     Int
+  preco_unitario Decimal  @db.Decimal(10, 2)
+  subtotal       Decimal  @db.Decimal(10, 2)
+  id_pedido      Int
+  id_produto     Int
+  
+  pedido         PEDIDO   @relation(fields: [id_pedido], references: [id_pedido], onDelete: Cascade, onUpdate: Cascade)
+  produto        PRODUTO  @relation(fields: [id_produto], references: [id_produto], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([id_pedido, id_produto])
+  @@index([id_produto])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PAGAMENTO {
+  id_pagamento    Int     @id @default(autoincrement())
+  valor_pago      Decimal @db.Decimal(10, 2)
+  forma_pagamento String  @db.VarChar(30)
+  status          String  @default("PENDENTE") @db.VarChar(20)
+  id_pedido       Int     @unique
+  
+  pedido          PEDIDO  @relation(fields: [id_pedido], references: [id_pedido], onDelete: Cascade, onUpdate: Cascade)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PEDIDO {
+  id_pedido   Int           @id @default(autoincrement())
+  data_pedido DateTime?     @default(now()) @db.Timestamp(0)
+  valor_total Decimal       @db.Decimal(10, 2)
+  status      String        @default("PENDENTE") @db.VarChar(20)
+  id_cliente  Int
+  
+  cliente     CLIENTE       @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, onUpdate: Cascade)
+  itens       ITEM_PEDIDO[]
+  pagamento   PAGAMENTO?
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PRODUTO {
+  id_produto     Int                @id @default(autoincrement())
+  nome           String
+  descricao      String?
+  preco          Decimal            @db.Decimal(10, 2)
+  estoque        Int                @default(0)
+  estoque_minimo Int                @default(10)
+  imagem         String?
+  featured       Boolean?           @default(false)
+  tamanhos       String?
+  id_fornecedor  Int
+  id_categoria   Int
+
+  categoria      CATEGORIA          @relation(fields: [id_categoria], references: [id_categoria], onDelete: Restrict, onUpdate: Cascade)
+  fornecedor     FORNECEDOR         @relation(fields: [id_fornecedor], references: [id_fornecedor], onDelete: Restrict, onUpdate: Cascade)
+  itens          ITEM_PEDIDO[]
+  alertas        ALERTA_ESTOQUE[]
+}
