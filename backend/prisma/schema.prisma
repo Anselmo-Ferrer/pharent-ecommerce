@@ -28,7 +28,6 @@ model CATEGORIA {
   produtos     PRODUTO[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model CLIENTE {
   id_cliente Int      @id @default(autoincrement())
   nome       String   @db.VarChar(100)
@@ -42,7 +41,6 @@ model CLIENTE {
   pedidos    PEDIDO[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model FORNECEDOR {
   id_fornecedor Int      @id @default(autoincrement())
   nome          String
@@ -53,7 +51,6 @@ model FORNECEDOR {
   produtos      PRODUTO[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model ITEM_PEDIDO {
   id_item        Int      @id @default(autoincrement())
   quantidade     Int
@@ -69,7 +66,6 @@ model ITEM_PEDIDO {
   @@index([id_produto])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model PAGAMENTO {
   id_pagamento    Int     @id @default(autoincrement())
   valor_pago      Decimal @db.Decimal(10, 2)
@@ -80,7 +76,6 @@ model PAGAMENTO {
   pedido          PEDIDO  @relation(fields: [id_pedido], references: [id_pedido], onDelete: Cascade, onUpdate: Cascade)
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model PEDIDO {
   id_pedido   Int           @id @default(autoincrement())
   data_pedido DateTime?     @default(now()) @db.Timestamp(0)
@@ -93,7 +88,6 @@ model PEDIDO {
   pagamento   PAGAMENTO?
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model PRODUTO {
   id_produto     Int                @id @default(autoincrement())
   nome           String

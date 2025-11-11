@@ -46,7 +46,7 @@ export const loginCliente = async (req: Request, res: Response) => {
     res.json({ 
       message: "Login realizado com sucesso",
       cliente: clienteSemSenha,
-      // token // Se implementar JWT
+      // token se implementar JWT
     });
   } catch (error) {
     console.error("Erro ao autenticar cliente:", error);
