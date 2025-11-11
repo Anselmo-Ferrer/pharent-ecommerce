@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import prisma from "../prismaClient";
 import bcrypt from "bcryptjs";
 
-// Listar todos os clientes
 export const getClientes = async (req: Request, res: Response) => {
   try {
     const clientes = await prisma.cLIENTE.findMany();
@@ -12,7 +11,6 @@ export const getClientes = async (req: Request, res: Response) => {
   }
 };
 
-// Buscar cliente por ID
 export const getClienteById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -24,7 +22,6 @@ export const getClienteById = async (req: Request, res: Response) => {
   }
 };
 
-// Criar cliente
 export const createCliente = async (req: Request, res: Response) => {
   const { nome, cpf, email, telefone, endereco, senha, role } = req.body;
 
@@ -66,7 +63,6 @@ export const createCliente = async (req: Request, res: Response) => {
   }
 };
 
-// Atualizar cliente
 export const updateCliente = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { nome, cpf, email, telefone, endereco } = req.body;
@@ -81,7 +77,6 @@ export const updateCliente = async (req: Request, res: Response) => {
   }
 };
 
-// Deletar cliente
 export const deleteCliente = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -91,8 +86,6 @@ export const deleteCliente = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Erro ao deletar cliente" });
   }
 };
-
-
 
 export const updateSenha = async (req: Request, res: Response) => {
   const { id } = req.params;

@@ -42,7 +42,6 @@ export const createPedido = async (req: Request, res: Response) => {
   console.log("📥 Recebendo pedido:", { id_cliente, items, valor_total, forma_pagamento });
 
   try {
-    // Validações iniciais
     if (!id_cliente) {
       return res.status(400).json({ error: "ID do cliente é obrigatório" });
     }
@@ -59,7 +58,6 @@ export const createPedido = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Forma de pagamento é obrigatória" });
     }
 
-    // Verificar se o cliente existe
     const cliente = await prisma.cLIENTE.findUnique({
       where: { id_cliente: Number(id_cliente) },
     });
@@ -68,7 +66,6 @@ export const createPedido = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
 
-    // Verificar estoque disponível ANTES de criar o pedido
     for (const item of items) {
       if (!item.productId || !item.quantity) {
         return res.status(400).json({ 
@@ -93,7 +90,7 @@ export const createPedido = async (req: Request, res: Response) => {
       }
     }
 
-    console.log("✅ Validações concluídas. Iniciando transação...");
+    console.log("Validações concluídas. Iniciando transação...");
 
     // Criar o pedido com transação para garantir integridade
     const resultado = await prisma.$transaction(async (tx) => {
@@ -106,7 +103,7 @@ export const createPedido = async (req: Request, res: Response) => {
         },
       });
 
-      console.log("📦 Pedido criado:", pedido.id_pedido);
+      console.log("Pedido criado:", pedido.id_pedido);
 
       // 2. Criar os itens do pedido E atualizar estoque
       const itensCriados = [];

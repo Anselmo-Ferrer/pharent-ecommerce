@@ -1,12 +1,10 @@
-// src/controllers/fornecedorController.ts
 import { Request, Response } from "express";
 import prisma from "../prismaClient";
 
-// Listar fornecedores com contagem de produtos
 export const getFornecedores = async (req: Request, res: Response) => {
   try {
     const fornecedores = await prisma.fORNECEDOR.findMany({
-      include: { produtos: true }, // inclui produtos
+      include: { produtos: true },
     });
     res.json(fornecedores);
   } catch (error) {
