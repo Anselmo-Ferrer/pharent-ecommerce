@@ -1,16 +1,24 @@
 "use client"
 
 import Link from "next/link"
-import { ShoppingCart, Search, Menu, User, LayoutDashboard } from "lucide-react"
+import { ShoppingCart, Search, Menu, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CartSidebar } from "@/components/cart-sidebar"
 import { useCartStore } from "@/stores/cart-store"
 import { UserMenu } from "./user-menu"
+import { useEffect, useState } from "react"
 
 export function StoreHeader() {
   const { getTotalItems } = useCartStore()
-  const cartCount = getTotalItems()
+  
+  const [mounted, setMounted] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+
+  useEffect(() => {
+    setMounted(true)
+    setCartCount(getTotalItems())
+  }, [getTotalItems])
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -48,7 +56,7 @@ export function StoreHeader() {
           <CartSidebar>
             <Button className="relative" variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
+              {mounted && cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center">
                   {cartCount}
                 </span>
