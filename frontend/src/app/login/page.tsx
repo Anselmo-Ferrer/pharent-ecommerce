@@ -52,7 +52,7 @@ export default function LoginPage() {
 
       // Redirecionar baseado no role
       if (data.cliente.role === "admin") {
-        router.push("/dashboard/admin")
+        router.push("/dashboard")
       } else {
         router.push("/")
       }
