@@ -35,14 +35,17 @@ export default function ProductDetailPage() {
   const { addToCart } = useCart()
 
   // Fetch product by ID
-  useEffect(() => {
+    useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true)
         const res = await fetch(`http://localhost:3001/api/produtos/${id}`)
         const data = await res.json()
-        // Converte preco Decimal para number
-        setProduct({ ...data, preco: Number(data.preco) })
+        setProduct({ 
+          ...data, 
+          preco: Number(data.preco),
+          tamanhos: data.tamanhos ? data.tamanhos.split(',').map((t: string) => t.trim()) : []
+        })
       } catch (err) {
         console.error(err)
       } finally {
@@ -135,7 +138,7 @@ export default function ProductDetailPage() {
               )}
 
               {/* Quantity Selector */}
-              <div className="flex items-center gap-4">
+              {/*<div className="flex items-center gap-4">
                 <span className="font-semibold text-sm uppercase tracking-wide">Quantidade:</span>
                 <div className="flex items-center border border-border rounded-md">
                   <Button
@@ -156,7 +159,7 @@ export default function ProductDetailPage() {
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
-              </div>
+              </div>*/}
 
               <div className="space-y-2">
                 <p className="text-sm">

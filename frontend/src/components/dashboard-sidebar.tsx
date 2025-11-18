@@ -22,7 +22,7 @@ const menuItems = [
   { icon: Users, label: "Clientes", href: "/dashboard/customers" },
   { icon: Truck, label: "Fornecedores", href: "/dashboard/suppliers" },
   { icon: AlertTriangle, label: "Alertas de Estoque", href: "/dashboard/alerts" },
-  { icon: BarChart3, label: "Relatórios", href: "/dashboard/reports" },
+  // { icon: BarChart3, label: "Relatórios", href: "/dashboard/reports" },
 ]
 
 export function DashboardSidebar() {

@@ -14,6 +14,7 @@ interface Categoria {
   nome: string
   slug: string
   descricao?: string
+  imagem: string
 }
 
 interface Produto {
@@ -124,7 +125,7 @@ export default function HomePage() {
                       <CardContent className="p-0">
                         <div className="aspect-square relative bg-muted">
                           <Image
-                            src="/athlete-running-dynamic-action.jpg"
+                            src={category.imagem}
                             alt={category.nome}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform"
